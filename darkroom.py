@@ -6,12 +6,24 @@ Created on Sun Oct 27 15:22:28 2019
 """
 import random 
 import time
-
+from copy import copy
 class Map:
+    global nest
     def __init__(self):
-        self.area = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+        self.area = []
+        self.nest = []
+    def Build(self, x, y):
+        ycheck = 0
+        xcheck = 0
+        while ycheck < y:
+            self.nest.append(0)
+            ycheck = ycheck+1
+        while xcheck < x:
+            self.area.append(copy(self.nest))
+            xcheck = xcheck+1
     def Clear(self):
-        self.area = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+        self.area = []
+        self.nest = []
     def Print(self):
         for i in self.area:
             print(i)
@@ -20,7 +32,7 @@ class Map:
         print("===DARK ROOM===")
         print("================")
         global hero
-        self.area[4][0] = 9
+        self.area[-1][0] = 9
         hero = Character("",0,0,0,0)
         print("new game...")
         hero.name = input("What is your character name? ")
@@ -41,7 +53,7 @@ class Map:
                     for xindex, i in enumerate(self.area):
                         if xindex == xc:
                             self.area[yindex][xindex] = 1
-        self.area[4][0] = 9
+        self.area[-1][0] = 9
     def GenerateItems(self, x):
         checker = -1 
         while checker <= x:
@@ -53,7 +65,7 @@ class Map:
                     for xindex, i in enumerate(self.area):
                         if xindex == xc:
                             self.area[yindex][xindex] = random.randint(2,5) 
-        self.area[4][0] = 9
+        self.area[-1][0] = 9
     def GenerateEntity(self, x):
         checker = -1 
         while checker <= x:
@@ -65,7 +77,7 @@ class Map:
                     for xindex, i in enumerate(self.area):
                         if xindex == xc:
                             self.area[yindex][xindex] = random.randint(5,6) 
-        self.area[4][0] = 9
+        self.area[-1][0] = 9
     def MoveUp(self):
         print("You press on forwards into the unknown.")
         self.IsGameOver()
@@ -272,10 +284,12 @@ class Character:
 def start():
     global newmap
     newmap = Map()
+    newmap.Build(random.randint(1,10),random.randint(1,10))
     newmap.GeneratePlayer()    
-    newmap.GenerateMap(1)
-    newmap.GenerateItems(2)
-    newmap.GenerateEntity(2)
+    newmap.GenerateMap(len(newmap.area)/8)
+    newmap.GenerateItems(len(newmap.area)/4)
+    newmap.GenerateEntity(len(newmap.area)/4)
+    newmap.Print()
     print("You find yourself in a darkly lit corridor. You're not sure how you got here! But you know you must press on.")
     print()
     print("You can move forwards, backwards, left or right.")
