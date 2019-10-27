@@ -64,7 +64,7 @@ class Map:
                 if yindex == yc:
                     for xindex, i in enumerate(self.area):
                         if xindex == xc:
-                            self.area[yindex][xindex] = random.randint(6,6) 
+                            self.area[yindex][xindex] = random.randint(5,6) 
         self.area[4][0] = 9
     def MoveUp(self):
         print("You press on forwards into the unknown.")
@@ -197,21 +197,64 @@ def checkNumber(x):
         hero.defense = hero.defense + 2
         print(f"You now have {hero.defense} defense")
         return()
-    if x > 5:
+    if x == 5:
         print("You've found yourself a shadow beast")
-        Fight()
+        Fight1()
+        return()
+    if x == 6:
+        print("You've found yourself a small toad")
+        Fight2()
+        return()
+    if x == 7:
+        print("A goblin is alerted by your presence.")
+        Fight3()
         return()
 
-def Fight():
+def Fight1():
     print("The shadow beast lunges at you...")
-    shadowbeasthealth = 30
+    creaturehealth = 30
+    creatureattack = 5
     while hero.health >= 0:
-        hero.health = hero.health + (hero.defense-5)
+        hero.health = hero.health + (hero.defense-creatureattack)
         print(f"You take {hero.defense-5} damage.")
-        shadowbeasthealth = shadowbeasthealth - hero.attack
+        creaturehealth = creaturehealth - hero.attack
         print(f"You strike the shadow beast")
-        if shadowbeasthealth <= 0:
+        if creaturehealth <= 0:
             print("You successfully killed the shadow beast.")
+            print(f"You have {hero.health} hp remaining")
+            return()
+    print("You have died.")
+    time.sleep(2)
+    start()
+    
+def Fight2():
+    print("The toad croaks before leaping at you...")
+    creaturehealth = 10
+    creatureattack = 1
+    while hero.health >= 0:
+        hero.health = hero.health + (hero.defense-creatureattack)
+        print(f"You take {hero.defense-5} damage.")
+        creaturehealth = creaturehealth - hero.attack
+        print(f"You strike the shadow beast")
+        if creaturehealth <= 0:
+            print("You successfully killed the toad.")
+            print(f"You have {hero.health} hp remaining")
+            return()
+    print("You have died.")
+    time.sleep(2)
+    start()
+
+def Fight3():
+    print("The goblin charges at you...")
+    creaturehealth = 15
+    creatureattack = 3
+    while hero.health >= 0:
+        hero.health = hero.health + (hero.defense-creatureattack)
+        print(f"You take {hero.defense-5} damage.")
+        creaturehealth = creaturehealth - hero.attack
+        print(f"You strike the shadow beast")
+        if creaturehealth <= 0:
+            print("You successfully killed the goblin")
             print(f"You have {hero.health} hp remaining")
             return()
     print("You have died.")
