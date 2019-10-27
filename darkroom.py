@@ -2,7 +2,7 @@
 """
 Created on Sun Oct 27 15:22:28 2019
 
-@author: thomas balcombe
+@author: thoma
 """
 import random 
 import time
@@ -17,7 +17,7 @@ class Map:
             print(i)
     def GeneratePlayer(self):
         print("================")
-        print("===DARK ROOMS===")
+        print("===DARK ROOM===")
         print("================")
         global hero
         self.area[4][0] = 9
@@ -209,9 +209,9 @@ def Fight():
         hero.health = hero.health + (hero.defense-5)
         print(f"You take {hero.defense-5} damage.")
         shadowbeasthealth = shadowbeasthealth - hero.attack
-        print(f"You strike the shadowbeast")
+        print(f"You strike the shadow beast")
         if shadowbeasthealth <= 0:
-            print("You successfully killed the shadowbeast.")
+            print("You successfully killed the shadow beast.")
             print(f"You have {hero.health} hp remaining")
             return()
     print("You have died.")
@@ -264,23 +264,3 @@ def game():
         quit()
 
 start()
-    
-        
-
-        
-                        
-
-
-
-                        
-                
-
-            
-        
-    
-        
-        
-        
-    
-    
-    
