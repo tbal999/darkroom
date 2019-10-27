@@ -2,11 +2,13 @@
 """
 Created on Sun Oct 27 15:22:28 2019
 
-@author: thoma
+@author: thomas balcombe
 """
 import random 
 import time
 from copy import copy
+doublecheck = 0
+
 class Map:
     global nest
     def __init__(self):
@@ -29,11 +31,11 @@ class Map:
             print(i)
     def GeneratePlayer(self):
         print("================")
-        print("===DARK ROOM===")
+        print("===DARK__ROOM===")
         print("================")
         global hero
         self.area[-1][0] = 9
-        hero = Character("",0,0,0,0)
+        hero = Character()
         print("new game...")
         hero.name = input("What is your character name? ")
         hero.health = random.randint(50,100)
@@ -211,80 +213,80 @@ def checkNumber(x):
         return()
     if x == 5:
         print("You've found yourself a shadow beast")
-        Fight1()
+        Fight("shadow beast")
         return()
     if x == 6:
         print("You've found yourself a small toad")
-        Fight2()
+        Fight("toad")
         return()
     if x == 7:
         print("A goblin is alerted by your presence.")
-        Fight3()
+        Fight("goblin")
         return()
 
-def Fight1():
-    print("The shadow beast lunges at you...")
+def Fight(x):
+    global creature
+    global doublecheck
+    creature = Monster.name.index(x)
+    print(f"The {Monster.name[creature]} lunges at you...")
     creaturehealth = 30
     creatureattack = 5
     while hero.health >= 0:
         hero.health = hero.health + (hero.defense-creatureattack)
-        print(f"You take {hero.defense-5} damage.")
+        print(f"You take {hero.defense-Monster.attack[creature]} damage.")
         creaturehealth = creaturehealth - hero.attack
-        print(f"You strike the shadow beast")
+        print(f"You strike the {Monster.name[creature]} for {hero.attack} damage")
+        healthcheck()
         if creaturehealth <= 0:
-            print("You successfully killed the shadow beast.")
+            doublecheck = 0
+            print("You successfully killed the {Monster.name[creature]}.")
             print(f"You have {hero.health} hp remaining")
             return()
     print("You have died.")
+    doublecheck = 0
     time.sleep(2)
-    start()
-    
-def Fight2():
-    print("The toad croaks before leaping at you...")
-    creaturehealth = 10
-    creatureattack = 1
-    while hero.health >= 0:
-        hero.health = hero.health + (hero.defense-creatureattack)
-        print(f"You take {hero.defense-5} damage.")
-        creaturehealth = creaturehealth - hero.attack
-        print(f"You strike the shadow beast")
-        if creaturehealth <= 0:
-            print("You successfully killed the toad.")
-            print(f"You have {hero.health} hp remaining")
-            return()
-    print("You have died.")
-    time.sleep(2)
-    start()
 
-def Fight3():
-    print("The goblin charges at you...")
-    creaturehealth = 15
-    creatureattack = 3
-    while hero.health >= 0:
-        hero.health = hero.health + (hero.defense-creatureattack)
-        print(f"You take {hero.defense-5} damage.")
-        creaturehealth = creaturehealth - hero.attack
-        print(f"You strike the shadow beast")
-        if creaturehealth <= 0:
-            print("You successfully killed the goblin")
-            print(f"You have {hero.health} hp remaining")
+def healthcheck():
+    global doublecheck
+    if hero.health == 30 and doublecheck == 0:
+        kk = input("You have dropped below 30 health, do you wish to continue fighting? [y] / [n]")
+        if kk == 'y':
+            doublecheck = 1
             return()
-    print("You have died.")
-    time.sleep(2)
-    start()
+        if kk == 'n':
+            print(f"You manage to run away from the {Monster.name[creature]}")
+            doublecheck = 1
+            return()
     
+class Monsta:
+  def __init__(self):
+    self.name = []
+    self.health = []
+    self.defense = []
+    self.attack = []
+  def BuildMonster(self,a,b,c,d):
+      self.name.append(a)
+      self.health.append(b)
+      self.defense.append(c)
+      self.attack.append(d)
+
 class Character:
-  def __init__(self, name, health, attack, equip, defense):
-    self.name = name
-    self.health = health
-    self.defense = defense
-    self.attack = attack
-    self.equip = equip
+  def __init__(self):
+    self.name = ""
+    self.health = 0
+    self.defense = 0
+    self.attack = 0
+    self.equip = ""
 
 def start():
     global newmap
+    global Monster
+    Monster = Monsta()
+    Monster.BuildMonster("goblin",15,0,3)
+    Monster.BuildMonster("toad",10,0,1)
+    Monster.BuildMonster("shadow beast",20,0,5)
     newmap = Map()
-    newmap.Build(random.randint(1,10),random.randint(1,10))
+    newmap.Build(random.randint(2,5),random.randint(2,5))
     newmap.GeneratePlayer()    
     newmap.GenerateMap(len(newmap.area)/8)
     newmap.GenerateItems(len(newmap.area)/4)
