@@ -83,7 +83,7 @@ class Map:
                     return()
         self.Print()
     def MoveDown(self):
-        print("You turn around and walk backwards, noticing your path has changed from what it was before.")
+        print("You go back.")
         self.IsGameOver()
         time.sleep(1)
         for yindex, i in enumerate(self.area):
