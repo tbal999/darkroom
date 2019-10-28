@@ -15,6 +15,8 @@ class Map:
     def __init__(self):
         self.area = []
         self.nest = []
+        self.earea = []
+        self.enest = []
     def Build(self, x, y):
         ycheck = 0
         xcheck = 0
@@ -24,6 +26,7 @@ class Map:
         while xcheck < x:
             self.area.append(copy(self.nest))
             xcheck = xcheck+1
+        self.earea.append(self.area)
     def Clear(self):
         self.area = []
         self.nest = []
@@ -52,12 +55,12 @@ class Map:
                 checker = checker+1
                 yc = random.randint(0,len(self.area))
                 xc = random.randint(0,len(self.area[0]))
-                print(xc,yc)
+                #print(xc,yc)
                 self.area[yc][xc] = 1
             except:
                 self.area[-1][0] = 9
-                print(yc, xc, len(self.area),len(self.area[0]))
-        print(xc, yc, len(self.area),len(self.area[0]))
+                #print(yc, xc, len(self.area),len(self.area[0]))
+        #print(xc, yc, len(self.area),len(self.area[0]))
         self.area[-1][0] = 9
     def GenerateItems(self, x):
         checker = -1 
@@ -66,12 +69,12 @@ class Map:
                 checker = checker+1
                 yc = random.randint(0,len(self.area))
                 xc = random.randint(0,len(self.area[0]))
-                print(xc,yc)
+                #print(xc,yc)
                 self.area[yc][xc] = random.randint(2,8) 
             except:
                 self.area[-1][0] = 9
-                print(yc, xc, len(self.area),len(self.area[0]))
-        print(xc, yc, len(self.area),len(self.area[0]))
+                #print(yc, xc, len(self.area),len(self.area[0]))
+        #print(xc, yc, len(self.area),len(self.area[0]))
         self.area[-1][0] = 9
     def GenerateEntity(self, x):
         checker = -1 
@@ -80,12 +83,12 @@ class Map:
                 checker = checker+1
                 yc = random.randint(0,len(self.area))
                 xc = random.randint(0,len(self.area[0]))
-                print(xc,yc)
+                #print(xc,yc)
                 self.area[yc][xc] = random.randint(10,12) 
             except:
                 self.area[-1][0] = 9
-                print(yc, xc, len(self.area),len(self.area[0]))
-        print(xc, yc, len(self.area),len(self.area[0]))
+                #print(yc, xc, len(self.area),len(self.area[0]))
+        #print(xc, yc, len(self.area),len(self.area[0]))
         self.area[-1][0] = 9
     def MoveUp(self):
         print("You press on forwards into the unknown.")
@@ -151,6 +154,7 @@ class Map:
                     self.area[yindex][xindex-1] = 0
                     return()
     def IsGameOver(self):
+        global level
         for yindex, i in enumerate(self.area):
             for xindex, a in enumerate(i):
                 if self.area[yindex][xindex] != 9 and self.area[yindex][xindex] != 0:
@@ -159,6 +163,7 @@ class Map:
         newmap.Print()
         print("You successfully completed this floor.")
         print("You gained 2 points")
+        print("You are now in another part of the dungeon...")
         time.sleep(2)
         newmap.Clear()
         newmap.Build(random.randint(2,5),random.randint(2,5))  
@@ -338,7 +343,6 @@ def start():
     Item1.BuildItem("excalibur",5,10)
     newmap = Map()
     newmap.Build(random.randint(2,5),random.randint(2,5))
-    print(len(newmap.area),len(newmap.area[0]))
     newmap.GeneratePlayer()    
     newmap.GenerateMap(1)
     newmap.GenerateItems(2)
