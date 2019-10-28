@@ -47,10 +47,11 @@ class Map:
         for i in self.area:
             print(i)
     def GeneratePlayer(self):
+        global hero
         print("================")
         print("===DARK ROOM===")
         print("================")
-        global hero
+        time.sleep(2)
         hero = Character()
         print("new game...")
         hero.name = input("What is your character name? ")
@@ -425,7 +426,10 @@ def start():
     print()
     print("You can move forwards, backwards, left or right.")
     print("Controls: [w] - forwards, [s] - backwards, [a] - left, [d] - right.")
+    print("[p] - Player stats.")
     print("Press anything else to quit, i.e 'quit'.")
+    time.sleep(2)
+    print()
     level = 0
     game()
                        
@@ -434,10 +438,6 @@ def game():
     global newmap
     print(f"Your current score is: {level}")
     x = input("Choose your option:" )
-    print("Controls: [w] - forwards, [s] - backwards, [a] - left, [d] - right.")
-    print("[p] - Player stats.")
-    print("Press anything else to quit, i.e 'quit'.")
-    print()
     if x == "s":
         newmap.MoveDown()
         newmap.MoveDown1()
