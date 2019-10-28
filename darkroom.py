@@ -27,6 +27,9 @@ class Map:
             self.area.append(copy(self.nest))
             xcheck = xcheck+1
         self.earea.append(self.area)
+        self.area[-1][0] = 9
+        for i in self.area:
+            print(i)
     def Clear(self):
         self.area = []
         self.nest = []
@@ -38,7 +41,6 @@ class Map:
         print("===DARK ROOM===")
         print("================")
         global hero
-        self.area[-1][0] = 9
         hero = Character()
         print("new game...")
         hero.name = input("What is your character name? ")
@@ -48,6 +50,7 @@ class Map:
         print(f"Good luck, {hero.name}.")
         print(f"Your currently can do {hero.attack} damage")
         print(f"Your HP is {hero.health}")
+        print("Your current dungeon area is below")
     def GenerateMap(self, x):
         checker = -1 
         while checker <= x:
@@ -194,7 +197,7 @@ def checkNumber(x):
             print("Thankfully, nothing.")
             return()
         if xx == 5:
-            print("You see a few rays of light from high above, otherwise there's nothing.")
+            print("You see a few rays of light from high above; asides that, there's nothing.")
             return()
     if x == 1:
         print("You have found yourself a map!")
@@ -342,8 +345,8 @@ def start():
     Item1.BuildItem("giant frying pan",1,3)
     Item1.BuildItem("excalibur",5,10)
     newmap = Map()
-    newmap.Build(random.randint(2,5),random.randint(2,5))
-    newmap.GeneratePlayer()    
+    newmap.GeneratePlayer() 
+    newmap.Build(random.randint(2,5),random.randint(2,5))   
     newmap.GenerateMap(1)
     newmap.GenerateItems(2)
     newmap.GenerateEntity(3)
@@ -362,6 +365,7 @@ def game():
     print(f"Your current score is: {level}")
     x = input("Choose your option:" )
     print("Controls: [w] - forwards, [s] - backwards, [a] - left, [d] - right.")
+    print("[p] - Player stats.")
     print("Press anything else to quit, i.e 'quit'.")
     if x == "s":
         newmap.MoveDown()
@@ -376,7 +380,6 @@ def game():
         newmap.MoveRight()
         game()
     if x == "p":
-        newmap.Print()
         print(hero.health)
         print(hero.attack)
         print(hero.defense)
