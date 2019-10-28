@@ -7,10 +7,11 @@ Created on Sun Oct 27 15:22:28 2019
 import random 
 import time
 from copy import copy
+import sys
 doublecheck = 0
 mapsize = 2
 difficulty = 0
-healthgage = 0
+level = 0
 
 class Map:
     global nest
@@ -57,7 +58,7 @@ class Map:
         print("new game...")
         hero.name = input("What is your character name? ")
         hero.health = 100
-        hero.attack = 5
+        hero.attack = 2
         hero.equip = "bare fists"
         print(f"Good luck {hero.name}")
         time.sleep(0.5)
@@ -222,9 +223,9 @@ class Map:
         print("...into the next area.")
         print("You gained 2 points")
         time.sleep(1)
-        hero.attack = hero.attack/2
-        hero.health = hero.health+(50-healthgage)
-        print(f"You've lost some attack, and your health has changed suddenly to {hero.health}...")
+        hero.attack = 1+(level)
+        hero.health = hero.health+(level)
+        print(f"Because of your level, your attack is now {hero.attack}, and your health has increased to {hero.health}...")
         print("You are now in another part of the dungeon...")
         time.sleep(2)
         newmap.Clear()
@@ -246,6 +247,7 @@ def checkNumber(x):
     global newmap
     global level
     global doublecheck
+    global difficulty
     if x == 0:
         print(nothings[random.randint(0,5)])
         return()
@@ -312,6 +314,8 @@ def checkNumber(x):
             print()
             doublecheck = 0
             time.sleep(2)
+            difficulty = 0
+            level = 0
             start()
         hero.attack = 1
         return()
@@ -383,14 +387,13 @@ def Fight(x):
     global level
     global creature
     global doublecheck
+    global difficulty
     creature = Monster.name.index(x)
     print(f"There's a {Monster.name[creature]} ahead!")
     print(f"The {Monster.name[creature]} lunges at you...")
-    creaturehealth = Monster.health[creature]
-    creatureattack = Monster.attack[creature]
+    creaturehealth = Monster.health[creature] + difficulty
+    creatureattack = Monster.attack[creature] + difficulty
     while hero.health >= 0:
-        hero.health = hero.health - creatureattack
-        print(f"You take {hero.defense-Monster.attack[creature]} damage.")
         creaturehealth = creaturehealth - (hero.attack + hero.defense)
         print(f"You strike the {Monster.name[creature]} for {hero.attack} damage")
         healthcheck()
@@ -407,10 +410,14 @@ def Fight(x):
                 time.sleep(2)
                 start()
             return()
+        hero.health = hero.health - creatureattack
+        print(f"You take {hero.defense-Monster.attack[creature]} damage.")
     print("You have died.")
     print(f"Your final score is {level}")
     print()
     doublecheck = 0
+    difficulty = 0
+    level = 0
     time.sleep(2)
     start()
 
@@ -499,13 +506,13 @@ def start():
     Generator()
     print("Your current score is 0. You gain points for killing monsters and completing levels.")
     print("If you successfully kill all monsters in a map, you will move to the next level")
+    print("Every level will increase the difficulty")
     print("You find yourself in a darkly lit room...")
     print("===CONTROLS===")
     print("You can move forwards, backwards, left or right.")
     print("Controls: [w] - forwards, [s] - backwards, [a] - left, [d] - right.")
     print("[p] - Player stats.")
-    print("Type q to quit, if you want to.")
-    time.sleep(2)
+    print("Type q to quit if you want to.")
     print()
     level = 0
     game()
@@ -513,6 +520,8 @@ def start():
 def game():
     global level
     global newmap
+    global difficulty
+    print(f"Difficulty level: {difficulty}")
     print(f"Your current score is: {level}")
     x = input("Choose your option:" )
     try:
@@ -540,6 +549,7 @@ def game():
             game()
         if x == "q":
             quit()
+            sys.exit()
         else:
             game()
     except:
