@@ -59,8 +59,12 @@ class Map:
         hero.attack = random.randint(2,5)
         hero.equip = "bare fists"
         print(f"Good luck, {hero.name}.")
+        time.sleep(0.5)
         print(f"Your currently can do {hero.attack} damage")
         print(f"Your HP is {hero.health}")
+        time.sleep(0.5)
+        print("You are labelled on the map as the number '9'")
+        time.sleep(0.5)
         print("Your current dungeon area is detailed below...")
     def GenerateMap(self, x):
         checker = -1 
@@ -327,9 +331,9 @@ def Fight(x):
     creaturehealth = Monster.health[creature]
     creatureattack = Monster.attack[creature]
     while hero.health >= 0:
-        hero.health = hero.health + (hero.defense-creatureattack)
+        hero.health = hero.health - creatureattack
         print(f"You take {hero.defense-Monster.attack[creature]} damage.")
-        creaturehealth = creaturehealth - hero.attack
+        creaturehealth = creaturehealth - (hero.attack + hero.defense)
         print(f"You strike the {Monster.name[creature]} for {hero.attack} damage")
         healthcheck()
         if creaturehealth <= 0:
