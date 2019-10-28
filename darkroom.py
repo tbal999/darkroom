@@ -340,10 +340,17 @@ def Fight(x):
             doublecheck = 0
             level = level + 1
             print(f"You successfully killed the {Monster.name[creature]}.")
-            print(f"You have {hero.health} hp remaining")
+            print(f"You have {hero.health} health remaining.")
+            if hero.health <= 0:
+                print("Unfortunately, you also died.")
+                print(f"Your final score is {level}")
+                print()
+                doublecheck = 0
+                time.sleep(2)
+                start()
             return()
     print("You have died.")
-    print(f"Your final score was {level}")
+    print(f"Your final score is {level}")
     print()
     doublecheck = 0
     time.sleep(2)
