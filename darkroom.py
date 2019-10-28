@@ -55,12 +55,12 @@ class Map:
         print("new game...")
         hero.name = input("What is your character name? ")
         hero.health = random.randint(50,100)
-        hero.attack = 1
+        hero.attack = random.randint(2,5)
         hero.equip = "bare fists"
         print(f"Good luck, {hero.name}.")
         print(f"Your currently can do {hero.attack} damage")
         print(f"Your HP is {hero.health}")
-        print("Your current dungeon area is below")
+        print("Your current dungeon area is detailed below...")
     def GenerateMap(self, x):
         checker = -1 
         while checker <= x:
@@ -261,7 +261,6 @@ def checkNumber(x):
         return()
     if x == 3:
         print("A shadow shoots at you, knocking you off your feet.")
-        print("You drop your weapon.")
         hero.attack = 1
         print(f"You now have {hero.attack} attack")
         return()
