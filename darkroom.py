@@ -382,6 +382,7 @@ def game():
         newmap.MoveRight()
         game()
     if x == "p":
+        newmap.Print()
         print(f"Here are your stats, {hero.name}")
         print(f"Your health is: {hero.health}")
         print(f"You have {hero.attack} attack")
