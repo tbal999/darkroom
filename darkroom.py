@@ -51,9 +51,7 @@ class Map:
             print(i)
     def GeneratePlayer(self):
         global hero
-        print("================")
-        print("===DARK ROOMS===")
-        print("================")
+        logo()
         time.sleep(2)
         hero = Character()
         print("new game...")
@@ -61,7 +59,7 @@ class Map:
         hero.health = 100
         hero.attack = 5
         hero.equip = "bare fists"
-        print(f"Good luck, {hero.name}.")
+        print(f"Good luck {hero.name}")
         time.sleep(0.5)
         print(f"Your currently can do {hero.attack} damage")
         print(f"Your HP is {hero.health}")
@@ -114,7 +112,7 @@ class Map:
         #print(xc, yc, len(self.area),len(self.area[0]))
         self.area[-1][0] = 9
     def MoveUp(self):
-        print("You press on forwards into the unknown.")
+        print("You press on forwards...")
         self.IsGameOver()
         time.sleep(1)
         for yindex, i in enumerate(self.area):
@@ -162,7 +160,7 @@ class Map:
                         print(i)
                     return()
     def MoveLeft(self):
-        print("You take a left turn and move forwards")
+        print("You move left...")
         self.IsGameOver()
         time.sleep(1)
         for yindex, i in enumerate(self.area):
@@ -186,7 +184,7 @@ class Map:
                         print(i)
                     return()
     def MoveRight(self):
-        print("You take a right turn and move forwards")
+        print("You move right...")
         self.IsGameOver()
         time.sleep(1)
         for yindex, i in enumerate(self.area):
@@ -331,6 +329,24 @@ def checkNumber(x):
         print("A demon appears.")
         Fight("demon")
         return()
+
+def logo():
+    print("""
+                                                                    .-'''-.        .-'''-.                              
+_______                                                            '   _    \     '   _    \                            
+\  ___ `'.                          .                            /   /` '.   \  /   /` '.   \  __  __   ___             
+ ' |--.\  \                       .'|                           .   |     \  ' .   |     \  ' |  |/  `.'   `.           
+ | |    \  '           .-,.--.  .'  |                   .-,.--. |   '      |  '|   '      |  '|   .-.  .-.   '          
+ | |     |  '    __    |  .-. |<    |                   |  .-. |\    \     / / \    \     / / |  |  |  |  |  |          
+ | |     |  | .:--.'.  | |  | | |   | ____              | |  | | `.   ` ..' /   `.   ` ..' /  |  |  |  |  |  |     _    
+ | |     ' .'/ |   \ | | |  | | |   | \ .'              | |  | |    '-...-'`       '-...-'`   |  |  |  |  |  |   .' |   
+ | |___.' /' ` __ | | | |  '-  |   |/  .               | |  '-                               |  |  |  |  |  |  .   | / 
+/_______.'/   .'.''| | | |      |    /\  \              | |                                   |__|  |__|  |__|.'.'| |// 
+\_______|/   / /   | |_| |      |   |  \  \             | |                                                 .'.'.-'  /  
+             \ \._,\ '/|_|      '    \  \  \            |_|                                                 .'   \_.'   
+              `--'  `'         '------'  '---'
+              """)
+    return()
 
 
         
