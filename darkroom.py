@@ -26,13 +26,23 @@ class Map:
         while xcheck < x:
             self.area.append(copy(self.nest))
             xcheck = xcheck+1
-        self.earea.append(self.area)
         self.area[-1][0] = 9
         for i in self.area:
             print(i)
+        ycheck = 0
+        xcheck = 0
+        while ycheck < y:
+            self.enest.append(0)
+            ycheck = ycheck+1
+        while xcheck < x:
+            self.earea.append(copy(self.enest))
+            xcheck = xcheck+1
+        self.earea[-1][0] = 9
     def Clear(self):
         self.area = []
         self.nest = []
+        self.earea = []
+        self.enest = []
     def Print(self):
         for i in self.area:
             print(i)
@@ -108,7 +118,15 @@ class Map:
                     self.area[yindex][xindex] = 0
                     self.area[yindex-1][xindex] = 9
                     return()
-        self.Print()
+    def MoveUp1(self):
+        for yindex, i in enumerate(self.earea):
+            for xindex, a in enumerate(i):
+                if self.earea[yindex][xindex] == 9:
+                    self.earea[yindex][xindex] = 0
+                    self.earea[yindex-1][xindex] = 9
+                    for i in self.earea:
+                        print(i)
+                    return()
     def MoveDown(self):
         print("You go back.")
         self.IsGameOver()
@@ -124,7 +142,15 @@ class Map:
                     self.area[yindex-1][xindex] = 0
                     self.area[yindex][xindex] = 9
                     return()
-        self.Print()
+    def MoveDown1(self):
+        for yindex, i in enumerate(self.earea):
+            for xindex, a in enumerate(i):
+                if self.earea[yindex-1][xindex] == 9:
+                    self.earea[yindex-1][xindex] = 0
+                    self.earea[yindex][xindex] = 9
+                    for i in self.earea:
+                        print(i)
+                    return()
     def MoveLeft(self):
         print("You take a left turn and move forwards")
         self.IsGameOver()
@@ -140,7 +166,15 @@ class Map:
                     self.area[yindex][xindex-1] = 9
                     self.area[yindex][xindex] = 0
                     return()
-        self.Print()
+    def MoveLeft1(self):
+        for yindex, i in enumerate(self.earea):
+            for xindex, a in enumerate(i):
+                if self.earea[yindex][xindex] == 9:
+                    self.earea[yindex][xindex-1] = 9
+                    self.earea[yindex][xindex] = 0
+                    for i in self.earea:
+                        print(i)
+                    return()
     def MoveRight(self):
         print("You take a right turn and move forwards")
         self.IsGameOver()
@@ -152,9 +186,18 @@ class Map:
                         checkNumber(self.area[yindex][xindex])
                         self.area[yindex][xindex] = 9
                         self.area[yindex][xindex-1] = 0
-                        return()
+                        break
                     self.area[yindex][xindex] = 9
                     self.area[yindex][xindex-1] = 0
+                    return()
+    def MoveRight1(self):
+        for yindex, i in enumerate(self.earea):
+            for xindex, a in enumerate(i):
+                if self.earea[yindex][xindex-1] == 9:
+                    self.earea[yindex][xindex] = 9
+                    self.earea[yindex][xindex-1] = 0
+                    for i in self.earea:
+                        print(i)
                     return()
     def IsGameOver(self):
         global level
@@ -166,6 +209,10 @@ class Map:
         newmap.Print()
         print("You successfully completed this floor.")
         print("You gained 2 points")
+        time.sleep(1)
+        hero.attack = hero.attack/3
+        hero.health = hero.health/2
+        print("You feel your strength waning... you've lost some attack&health.")
         print("You are now in another part of the dungeon...")
         time.sleep(2)
         newmap.Clear()
@@ -233,6 +280,11 @@ def checkNumber(x):
     if x == 7:
         PickItem("giant frying pan")
         return()
+    if x == 8:
+        hero.health = hero.health+30
+        print("You found some healing water")
+        print("You have gained 30 health")
+        return()
     if x == 10:
         print("You've found yourself a shadow beast")
         Fight("shadow beast")
@@ -244,6 +296,15 @@ def checkNumber(x):
     if x == 12:
         print("A goblin is alerted by your presence.")
         Fight("goblin")
+        return()
+    if x == 12:
+        print("A hooded rogue is not pleased by your arrival.")
+        Fight("hooded rogue")
+        return()
+    if x == 13:
+        print("You slip and fall into a hole.")
+        print("You take some serious damage.")
+        hero.health = hero.health/2
         return()
         
 def PickItem(x):
@@ -328,6 +389,16 @@ class Character:
     self.attack = 0
     self.equip = ""
 
+def Generator():
+    global newmap
+    mapwidth = len(newmap.area[0])
+    mapheight = len(newmap.area)
+    print(mapwidth, mapheight)
+    newmap.GenerateMap(1)
+    newmap.GenerateItems((len(newmap.area[0]) + len(newmap.area))/2)
+    newmap.GenerateEntity(len(newmap.area[0]))
+    return()
+
 def start():
     global newmap
     global Monster
@@ -338,6 +409,7 @@ def start():
     Monster.BuildMonster("goblin",15,0,3,2)
     Monster.BuildMonster("toad",10,0,1,1)
     Monster.BuildMonster("shadow beast",20,0,5,3)
+    Monster.BuildMonster("hooded rogue",30,0,8,3)
     Item1.BuildItem("sword",0,5)
     Item1.BuildItem("dagger",0,2)
     Item1.BuildItem("shield",2,0)
@@ -347,10 +419,8 @@ def start():
     Item1.BuildItem("excalibur",5,10)
     newmap = Map()
     newmap.GeneratePlayer() 
-    newmap.Build(random.randint(2,5),random.randint(2,5))   
-    newmap.GenerateMap(2)
-    newmap.GenerateItems(4)
-    newmap.GenerateEntity(5)
+    newmap.Build(random.randint(2,5),random.randint(2,5))
+    Generator()
     print("Your current score is 0. You gain points for killing monsters and completing levels.")
     print("You find yourself in a darkly lit room...")
     print()
@@ -371,18 +441,21 @@ def game():
     print()
     if x == "s":
         newmap.MoveDown()
+        newmap.MoveDown1()
         game()
     if x == "w":
         newmap.MoveUp()
+        newmap.MoveUp1()
         game()
     if x == "a":
         newmap.MoveLeft()
+        newmap.MoveLeft1()
         game()
     if x == "d":
         newmap.MoveRight()
+        newmap.MoveRight1()
         game()
     if x == "p":
-        newmap.Print()
         print(f"Here are your stats, {hero.name}")
         print(f"Your health is: {hero.health}")
         print(f"You have {hero.attack} attack")
