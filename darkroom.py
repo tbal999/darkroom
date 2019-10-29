@@ -284,9 +284,9 @@ def checkNumber(x):
         PickItem("excalibur")
         return()
     if x == 8:
-        hero.health = hero.health+30
+        hero.health = hero.health+(10+level)
         print("You found some healing water")
-        print("You have gained 30 health")
+        print(f"You have gained {10+level} health")
         return()
     if x == 10:
         print("You've found yourself a small toad")
@@ -305,8 +305,8 @@ def checkNumber(x):
         print("You've lost your weapon... and can't find it!")
         time.sleep(0.5)
         print("You slip and fall. Oh no!")
-        print("Your head hits the ground first...")
-        hero.health = hero.health-40
+        print(f"Your head hits the ground first... you lose {difficulty+10} health.")
+        hero.health = hero.health-(difficulty+10)
         if hero.health <= 0:
             print("Unfortunately, you also died.")
             print(f"Your final score is {level}")
