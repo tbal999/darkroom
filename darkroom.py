@@ -225,7 +225,7 @@ class Map:
         time.sleep(1)
         hero.attack = 1+(level)
         hero.health = hero.health+(level)
-        print(f"Because of your current score of {hero.score}, your attack is now {hero.attack}, and your health has increased to {hero.health}...")
+        print(f"Because of your current score: {level}, your attack is now {hero.attack}, and your health has increased to {hero.health}...")
         print("You are now in another part of the dungeon...")
         time.sleep(2)
         newmap.Clear()
