@@ -219,7 +219,6 @@ class Map:
                     return()
         print("You suddenly find yourself phasing...")
         hole()
-        newmap.Print()
         print("...into the next area.")
         print("You gained 2 points")
         time.sleep(1)
@@ -230,10 +229,9 @@ class Map:
         time.sleep(2)
         newmap.Clear()
         mapsize = mapsize+1
+        level = level+2
         newmap.Build(random.randint(2,mapsize),random.randint(2,mapsize))
         Generator()
-        level = level+2
-        healthgage = healthgage+10
         game()
   
 def checkNumber(x):
