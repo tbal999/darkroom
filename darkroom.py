@@ -547,7 +547,6 @@ def game():
             print(f"You have {hero.defense} defense")
             game()
         if x == "q":
-            quit()
             sys.exit()
         else:
             game()
