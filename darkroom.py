@@ -230,6 +230,8 @@ class Map:
         time.sleep(2)
         newmap.Clear()
         mapsize = mapsize+1
+        if mapsize > 4:
+            mapsize = 4
         level = level+2
         newmap.Build(random.randint(2,mapsize),random.randint(2,mapsize))
         Generator()
