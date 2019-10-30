@@ -394,7 +394,9 @@ def Fight(x):
     creatureattack = Monster.attack[creature] + difficulty
     while hero.health >= 0:
         creaturehealth = creaturehealth - (hero.attack + hero.defense)
+        hero.health = hero.health - creatureattack
         print(f"You strike the {Monster.name[creature]} for {hero.attack} damage")
+        print(f"You are hit for {creatureattack} damage")
         healthcheck()
         if creaturehealth <= 0:
             doublecheck = 0
@@ -409,7 +411,6 @@ def Fight(x):
                 time.sleep(2)
                 start()
             return()
-        hero.health = hero.health - creatureattack
         print(f"You take {hero.defense-Monster.attack[creature]} damage.")
     print("You have died.")
     print(f"Your final score is {level}")
