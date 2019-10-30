@@ -302,7 +302,6 @@ def checkNumber(x):
         return()
     if x == 13:
         print("The ghost of bad luck spooks you!")
-        print("You've lost your weapon... and can't find it!")
         time.sleep(0.5)
         print("You slip and fall. Oh no!")
         print(f"Your head hits the ground first... you lose {difficulty+10} health.")
@@ -316,7 +315,8 @@ def checkNumber(x):
             difficulty = 0
             level = 0
             start()
-        hero.attack = 1
+        hero.attack = hero.attack/difficulty
+        print(f"You've lost some attack... and your attack is now {hero.attack}")
         return()
     if x == 14:
         print("You've found yourself a shadow beast")
