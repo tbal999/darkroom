@@ -1,4 +1,3 @@
-//WORK IN PROGRESS
 package main
 
 import (
@@ -6,186 +5,189 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"strconv"
 )
 
-//This is the player character
-type Player struct {
-	name   string
-	health int
-	attack int
-}
-
-//These are the monsters in the game
-type Monster struct {
-	name   []string
-	health []int
-	attack []int
-}
-
-func initialiseMap(ysize, xsize int, i *[][]int, i2 *[]int) {
-	fmt.Println("initialiseMap-" + strconv.Itoa(xsize) + strconv.Itoa(ysize))
-	a := *i2
-	b := 0
-	c := 0
-	d := *i
-	a = []int{0}
-	e := make([]int, len(a))
-	copy(e, a)
-	for b = 0; b < xsize; b++ {
-		e = append(e, 0)
-	}
-	*i2 = a
-	d = [][]int{}
-	*i = d
-	for c = 0; c < ysize; c++ {
-		initialiseMap2(ysize, xsize, i, &e)
-	}
-	f := *i
-	f[0][0] = 1
-	*i = f
-}
-
-func initialiseMap2(ysize, xsize int, i *[][]int, i2 *[]int) {
-	fmt.Println("initialiseMap2-" + strconv.Itoa(xsize) + strconv.Itoa(ysize))
-	a := *i
-	b := *i2
-	a = append(a, b)
-	*i = a
-	*i2 = b
-}
-
-func printMap(i [][]int) {
-	for yindex := range i {
-		fmt.Println(i[yindex])
-	}
-}
-
-func find(m [][]int) (i, j int) {
-	for i = range m {
-		for j = range m[i] {
-			if m[i][j] == 1 {
-				return i, j
-			}
-		}
-	}
-	return i, j
-}
-
-func Move(cmd string, m [][]int) {
-	//if len(m) <= 1 {
-	//	return
-	//}
-	i, j := find(m)
-
-	fmt.Println(i, j)
-	if i >= len(m) || j >= len(m[0]) {
-		return
-	}
-	switch cmd {
-	case "w":
-		if i <= 0 {
-			return
-		}
-		m[i][j], m[i-1][j] = m[i-1][j], m[i][j]
-	case "s":
-		if i == len(m)-1 {
-			return
-		}
-		m[i][j], m[i+1][j] = m[i+1][j], m[i][j]
-	case "a":
-		if j <= 0 {
-			return
-		}
-		m[i][j], m[i][j-1] = m[i][j-1], m[i][j]
-	case "d":
-		if j == len(m)-1 {
-			return
-		}
-		m[i][j], m[i][j+1] = m[i][j+1], m[i][j]
-	default:
-		return
-	}
-}
-
-func seedMap(realmap *[][]int, gamemap [][]int, cmd string) {
-	a := *realmap
-	a = [][]int{}
-	*realmap = a
-	for range gamemap {
-		seedMap2(realmap, gamemap, cmd)
-	}
-}
-
-func seedMap2(realmap *[][]int, gamemap [][]int, cmd string) {
-	a := *realmap
+func generateNest(x, cmd int) []int {
+	xindex := 0
 	nest := []int{}
-	for range gamemap {
-		switch cmd {
-		case "real":
-			nest = append(nest, rand.Intn(11))
-		case "zeros":
-			nest = append(nest, 0)
+	for xindex = 0; xindex < x; xindex++ {
+		nest = append(nest, 0)
+	}
+	switch cmd {
+	case 1:
+		for xindex = 0; xindex < x; xindex++ {
+			nest[randomNumber(0, x)] = randomNumber(0, 11)
 		}
 	}
-	a = append(a, nest)
-	switch cmd {
-	case "zeros":
-		a[0][0] = 1
-	}
-	*realmap = a
+	return nest
 }
+
+func generateSlice(x, y, cmd int) [][]int {
+	yindex := 0
+	slice := [][]int{}
+	for yindex = 0; yindex < y; yindex++ {
+		slice = append(slice, generateNest(x, cmd))
+	}
+	switch cmd {
+	case 0:
+		slice[0][0] = 2
+	}
+	return slice
+}
+
+func printSlice(x [][]int) {
+	for i := range x {
+		fmt.Println(x[i])
+	}
+
+}
+
+func randomNumber(min, max int) int {
+	z := rand.Intn(max)
+	if z < min {
+		z = min
+	}
+	return z
+}
+
+func resetSlice(a int, b int, zeros, ones *[][]int) {
+	i := *zeros
+	j := *ones
+	i = generateSlice(a, b, 0)
+	j = generateSlice(a, b, 1)
+	*zeros = i
+	*ones = j
+}
+
+func Move(i [][]int, s string) { //Moves the number 2 in the slice around, up,down,left,right
+	switch s {
+	case "w":
+		// MOVE UP
+		fmt.Println("Moving Up")
+		for a := range i {
+			if a == 0 {
+				for b := range i[a] {
+					if i[a+1][b] == 2 {
+						i[a+1][b] = 0
+						i[a][b] = 2
+						return
+					}
+					if i[a][b] == 2 {
+						i[a][b] = 0
+						i[len(i[a])-1][b] = 2
+						return
+					}
+				}
+			}
+			if a != 0 {
+				for b := range i[a] {
+					if i[a][b] == 2 {
+						i[a-1][b] = 2
+						i[a][b] = 0
+						return
+					}
+				}
+			}
+
+		} // END MOVE UP
+	case "s":
+		// MOVE DOWN
+		fmt.Println("Moving Down")
+		for a := range i {
+			if a != len(i[a])-1 {
+				for b := range i[a] {
+					if i[a][b] == 2 {
+						i[a][b] = 0
+						i[a+1][b] = 2
+						return
+					}
+				}
+			}
+			if a == len(i[a])-1 {
+				for b := range i[a] {
+					if i[a][b] == 2 {
+						i[a][b] = 0
+						i[0][b] = 2
+						return
+					}
+				}
+			}
+
+		} // END MOVE DOWN
+	case "a":
+		// MOVE LEFT
+		fmt.Println("Moving Left")
+		for a := range i {
+			for b := range i[a] {
+				if b == 0 {
+					if i[a][b] == 2 {
+						i[a][b] = 0
+						i[a][len(i[b])-1] = 2
+						return
+					}
+				}
+				if b != 0 {
+					if i[a][b] == 2 {
+						i[a][b] = 0
+						i[a][b-1] = 2
+						return
+					}
+				}
+			}
+		} //END MOVE LEFT
+	case "d":
+		// MOVE RIGHT
+		fmt.Println("Moving Right")
+		for a := range i {
+			for b := range i[a] {
+				if b == len(i[b])-1 {
+					if i[a][b] == 2 {
+						i[a][b] = 0
+						i[a][0] = 2
+						return
+					}
+				}
+				if b != len(i[b])-1 {
+					if i[a][b] == 2 {
+						i[a][b] = 0
+						i[a][b+1] = 2
+						return
+					}
+				}
+			}
+		} //END MOVE RIGHT
+	} //END CASES
+} // END FUNCTION
 
 func main() {
-	//you := Player{}
-	enemy := Monster{}
-	enemy.name = append(enemy.name, "toad", "goblin", "shadowknight", "rogue", "demon")
-	enemy.health = append(enemy.health, 10, 15, 20, 25, 30)
-	enemy.attack = append(enemy.attack, 1, 2, 4, 6, 8)
-	zeronest := []int{}
-	zeromap := [][]int{}
-	realmap := [][]int{}
-	Scanner := bufio.NewScanner(os.Stdin)
-	fmt.Println("DUNGEON GAME - IN GO")
-	fmt.Println("You are the number 1 on the map. Press w, s, a, d to move around.")
-	fmt.Println("Every time you kill a monster, you gain 1 point.")
-	fmt.Println("Every time you complete a dungeon, you gain 2 points.")
-	fmt.Println("First, type in your name...")
-	//Scanner.Scan()
-	//you.name = Scanner.Text()
-	//you.attack = 2
-	//you.health = 100
-	//fmt.Println("Good luck " + you.name + "!")
-	//fmt.Println("You have " + strconv.Itoa(you.attack) + " attack and " + strconv.Itoa(you.health) + " health.")
-	endgame := 0
+	gameover := 0
 	difficulty := 0
-	//score := 0
-	for endgame == 0 {
-		fmt.Println(difficulty)
+	zeroslice := generateSlice(2, 2, 0)
+	gameslice := generateSlice(2, 2, 1)
+	for gameover != 1 {
 		difficulty = difficulty + 1
-		if difficulty > 4 {
-			difficulty = 4
-		}
-		initialiseMap((rand.Intn(difficulty) + 1), (rand.Intn(difficulty) + 1), &zeromap, &zeronest)
-		seedMap(&realmap, zeromap, "real")
-		seedMap(&zeromap, zeromap, "zeros")
-		printMap(realmap)
-		printMap(zeromap)
-		fmt.Println("Type here: ")
+		mapx, mapy := randomNumber(2, 5), randomNumber(2, 5)
+		fmt.Println(difficulty)
+		printSlice(zeroslice)
+		fmt.Println("")
+		printSlice(gameslice)
+		Scanner := bufio.NewScanner(os.Stdin)
+		fmt.Println("Type here:")
 		Scanner.Scan()
 		result := Scanner.Text()
 		switch result {
-		case "w":
-			Move(result, zeromap)
-		case "s":
-			Move(result, zeromap)
-		case "a":
-			Move(result, zeromap)
-		case "d":
-			Move(result, zeromap)
 		case "q":
-			endgame = 1
-
+			gameover = 1
+		case "n":
+			resetSlice(mapx, mapy, &zeroslice, &gameslice)
+		case "w":
+			Move(zeroslice, "w")
+		case "s":
+			Move(zeroslice, "s")
+		case "a":
+			Move(zeroslice, "a")
+		case "d":
+			Move(zeroslice, "d")
 		}
 	}
 }
