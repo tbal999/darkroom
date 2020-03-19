@@ -1,5 +1,5 @@
 # darkroom
-A text based dungeon crawler game
+A console based dungeon crawler game
 
 The aim of the game is to get as many points as possible.
 Press w, s, a, d to move around. 
