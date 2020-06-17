@@ -8,5 +8,7 @@ Every time you kill a monster, you gain a point.
 The dungeons are randomly sized,
 and the creatures/items you find are randomly scattered in the dungeon.
 
+![Demo](https://raw.githubusercontent.com/tbal999/darkroom-py/master/example1.gif)
+
 Have fun!
 
